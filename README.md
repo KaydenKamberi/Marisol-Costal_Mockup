@@ -3,9 +3,9 @@
 A static marketing site for a fictional Baja-inspired seafood restaurant with three
 San Diego locations. Built as a portfolio demonstration piece.
 
-> **Status: checkpoint 2 of 6 — scaffold.** Structure, design tokens, fonts, and the
-> shared header/footer are in place. Page-level design lands in checkpoints 3 to 5 and
-> this README is completed in checkpoint 6.
+> **Status: checkpoint 5 of 6.** All four pages are designed and responsive. The
+> polish pass, accessibility review and the full version of this README land in
+> checkpoint 6.
 
 ## Running it
 
