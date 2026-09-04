@@ -120,9 +120,14 @@ fieldset {
   outline-offset: 2px;
 }
 
-/* Inside cobalt or ink fields the chile ring loses contrast, so it flips
-   to salt white. */
-.field-dark :focus-visible {
+/* Inside cobalt or ink fields the chile ring loses contrast, so it flips to
+   salt white. The open mobile nav is one of those fields: a chile ring on the
+   ink panel measures 2.86:1, under the 3:1 minimum for a focus indicator.
+   The `.field-dark:focus-visible` case covers a dark panel that is itself
+   focusable, which the descendant selector alone would miss. */
+.field-dark :focus-visible,
+.field-dark:focus-visible,
+.site-nav.is-open :focus-visible {
   outline-color: var(--sal);
 }
 
@@ -197,20 +202,13 @@ fieldset {
 }
 
 /* --------------------------------------------------------------------------
-   6. Talavera band
-   A cobalt-on-whitewash azulejo lattice, drawn in CSS. Used exactly twice:
-   under the header and above the footer.
-   -------------------------------------------------------------------------- */
+   6. Header rule
 
-.talavera {
-  height: 14px;
-  background-color: var(--cal);
-  background-image:
-    linear-gradient(45deg, var(--cobalto) 25%, transparent 25%, transparent 75%, var(--cobalto) 75%),
-    linear-gradient(45deg, var(--cobalto) 25%, transparent 25%, transparent 75%, var(--cobalto) 75%);
-  background-size: 14px 14px;
-  background-position: 0 0, 7px 7px;
-}
+   This slot held a CSS-drawn talavera lattice. Cut: at 14px it read as a
+   checkered ribbon rather than azulejo, and it competed with the hero, which
+   is where this page spends its boldness. A single structural rule does the
+   separating job without arguing.
+   -------------------------------------------------------------------------- */
 
 /* --------------------------------------------------------------------------
    7. Buttons
@@ -270,6 +268,7 @@ fieldset {
 
 .site-header {
   background-color: var(--cal);
+  border-bottom: 3px solid var(--cobalto);
   position: relative;
   z-index: 20;
 }
@@ -710,8 +709,350 @@ main > div {
   padding: var(--space-4);
 }
 
+
 /* --------------------------------------------------------------------------
-   12. Motion
+   12. Home page
+
+   The hero is a tiled panel: flat blocks butted together with the whitewash
+   ground showing through as grout. The photograph is a neighbouring tile, not
+   a backdrop with text laid over it.
+   -------------------------------------------------------------------------- */
+
+.hero {
+  padding-block: var(--space-3) var(--space-5);
+}
+
+.hero-grid {
+  display: grid;
+  gap: var(--grout);
+  grid-template-columns: 1fr;
+}
+
+.hero-tile {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3);
+}
+
+/* The cobalt panel: the name painted on tile. */
+.hero-tile-name {
+  background-color: var(--cobalto);
+  color: var(--cal);
+  justify-content: flex-end;
+  padding: var(--space-5) var(--space-3) var(--space-4);
+}
+
+.hero-tile-name h1 {
+  margin: 0;
+}
+
+.hero-rule {
+  width: 4rem;
+  border: 0;
+  border-top: 5px solid var(--cal);
+  margin: var(--space-3) 0 0;
+}
+
+.hero-kicker {
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: var(--space-2) 0 0;
+}
+
+.hero-line {
+  margin: var(--space-2) 0 0;
+  max-width: 32ch;
+}
+
+/* The photograph, full brightness, no scrim. */
+.hero-tile-photo {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.hero-tile-photo img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 60vh;
+  object-fit: cover;
+}
+
+/* The one chile block on the page. */
+.hero-tile-reserve {
+  background-color: var(--chile);
+  color: var(--sal);
+  text-decoration: none;
+  justify-content: space-between;
+  gap: var(--space-4);
+  transition: background-color 120ms linear;
+}
+
+.hero-tile-reserve:hover {
+  background-color: var(--tinta);
+}
+
+.hero-tile-hours,
+.hero-tile-locations {
+  background-color: var(--sal);
+  color: var(--tinta);
+}
+
+.hero-tile-hours p,
+.hero-tile-locations p {
+  margin: 0;
+}
+
+/* In a two-column tile this value has about 155px to live in at 1024px wide.
+   At a flat 2rem it broke as "11am-" / "10pm" and the 0.9 display leading made
+   the two lines collide, so it scales with the viewport and never breaks. */
+.hero-tile-hours .t-sub {
+  margin-bottom: 0.4rem;
+  font-size: clamp(1.25rem, 1.6vw + 0.4rem, 2rem);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.tile-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-weight: 600;
+  font-size: var(--step-0);
+}
+
+.tile-links a {
+  text-decoration: none;
+  border-bottom: 2px solid var(--hielo);
+  padding-bottom: 0.15rem;
+}
+
+.tile-links a:hover {
+  border-bottom-color: var(--chile);
+  color: var(--chile);
+}
+
+@media (min-width: 600px) and (max-width: 899.98px) {
+  .hero-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hero-tile-name,
+  .hero-tile-photo {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 900px) {
+  .hero-grid {
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto minmax(11rem, auto);
+  }
+
+  .hero-tile-name      { grid-column: 1 / 8;  grid-row: 1; }
+  .hero-tile-photo     { grid-column: 8 / 13; grid-row: 1 / 3; }
+  .hero-tile-reserve   { grid-column: 1 / 4;  grid-row: 2; }
+  .hero-tile-hours     { grid-column: 4 / 6;  grid-row: 2; }
+  .hero-tile-locations { grid-column: 6 / 8;  grid-row: 2; }
+
+  .hero-tile-photo img {
+    aspect-ratio: auto;
+    max-height: none;
+  }
+}
+
+/* Intro ------------------------------------------------------------------ */
+
+.intro {
+  padding-block: var(--space-4) var(--space-6);
+}
+
+.intro-mark {
+  width: 3.5rem;
+  border: 0;
+  border-top: 5px solid var(--chile);
+  margin: 0 0 var(--space-3);
+}
+
+.intro p + p {
+  margin-top: var(--space-3);
+}
+
+.intro a {
+  font-weight: 600;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.intro a:hover {
+  color: var(--chile);
+}
+
+/* Signature dishes -------------------------------------------------------- */
+
+.signatures {
+  padding-block: 0 var(--space-7);
+}
+
+.section-head-link {
+  font-size: var(--step--1);
+  font-weight: 600;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  white-space: nowrap;
+}
+
+.section-head-link:hover {
+  color: var(--chile);
+}
+
+.dish-grid {
+  display: grid;
+  gap: var(--space-5) var(--space-3);
+  grid-template-columns: 1fr;
+  margin-top: var(--space-4);
+}
+
+.dish img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  margin-bottom: var(--space-2);
+}
+
+/* Name and price share a baseline under a heavy rule: the price is the second
+   headline, never a whispered grey number. */
+.dish-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  border-top: 2px solid var(--tinta);
+  padding-top: 0.6rem;
+}
+
+.dish-head h3 {
+  margin: 0;
+  line-height: 1;
+}
+
+.dish-price {
+  margin: 0;
+  font-size: var(--step-1);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dish-note {
+  margin: 0.5rem 0 0;
+  font-size: var(--step--1);
+  max-width: 34ch;
+  color: #35426B;
+}
+
+@media (min-width: 640px) {
+  .dish-grid { grid-template-columns: repeat(2, 1fr); }
+  .dish img { aspect-ratio: 1 / 1; }
+}
+
+@media (min-width: 1024px) {
+  .dish-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Locations strip --------------------------------------------------------- */
+
+.locations-strip {
+  background-color: var(--cobalto);
+  color: var(--cal);
+  padding-block: var(--space-6);
+}
+
+.locations-strip h2 {
+  margin: 0;
+}
+
+.locations-strip a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.locations-strip a:hover {
+  text-decoration-thickness: 3px;
+}
+
+.strip-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.strip-grid > li + li {
+  border-top: 1px solid rgba(238, 241, 243, 0.35);
+  padding-top: var(--space-4);
+}
+
+.strip-grid h3 {
+  margin: 0 0 var(--space-2);
+}
+
+.strip-grid p {
+  margin: 0 0 0.4rem;
+}
+
+.strip-address {
+  font-style: normal;
+}
+
+.strip-hours {
+  margin-top: var(--space-5);
+  padding-top: var(--space-3);
+  border-top: 1px solid rgba(238, 241, 243, 0.35);
+}
+
+.hours-list-row li span:first-child {
+  min-width: 5.5rem;
+}
+
+@media (min-width: 768px) {
+  .strip-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .strip-grid > li,
+  .strip-grid > li + li {
+    padding-inline: var(--space-4);
+    padding-top: 0;
+    border-top: 0;
+    border-left: 1px solid rgba(238, 241, 243, 0.35);
+  }
+
+  .strip-grid > li:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .hours-list-row {
+    flex-direction: row;
+    gap: var(--space-6);
+  }
+
+  .hours-list-row li {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .hours-list-row li span:first-child {
+    min-width: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   13. Motion
    -------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
