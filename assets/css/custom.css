@@ -650,7 +650,8 @@ fieldset {
 .reserve-inner > *,
 .page-head-inner > *,
 .field-row > *,
-.menu-item > * {
+.menu-item > *,
+.dish-head > * {
   min-width: 0;
 }
 
@@ -1067,7 +1068,7 @@ main > div {
 .dish figure {
   margin: 0 0 var(--space-2);
   overflow: hidden;
-  border-radius: var(--arch);
+  border-radius: var(--radius);
 }
 
 .dish img {
@@ -1079,10 +1080,9 @@ main > div {
 /* Name and price share a baseline under a heavy rule: the price is the second
    headline, never a whispered grey number. */
 .dish-head {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: baseline;
-  justify-content: space-between;
   gap: 0 var(--space-2);
   padding-top: 0.2rem;
 }
@@ -1097,6 +1097,7 @@ main > div {
   font-size: var(--t-h3);
   font-weight: 500;
   line-height: 1.2;
+  color: var(--coral-ink);
 }
 
 .dish-note {
@@ -1633,6 +1634,14 @@ main > div {
   object-fit: cover;
 }
 
+.about-figure-feature {
+  margin-top: var(--space-4);
+}
+
+.about-figure-feature img {
+  aspect-ratio: 4 / 3;
+}
+
 .about-figure figcaption {
   padding-top: 0.6rem;
   font-size: var(--step--1);
@@ -1650,7 +1659,7 @@ main > div {
 
 @media (min-width: 800px) {
   .about-section {
-    grid-template-columns: 16rem 1fr;
+    grid-template-columns: 20rem 1fr;
     gap: var(--space-5);
   }
 

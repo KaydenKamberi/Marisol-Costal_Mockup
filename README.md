@@ -132,34 +132,51 @@ all revealed content is shown immediately.
 
 ## Images
 
-Every image is a Lorem Picsum placeholder addressed by a **seed**, so the same
-photo loads on every refresh and layouts stay stable:
+Real photography lives in `assets/images/`, named `<role>-<subject>.jpg` — all
+lowercase, no spaces, so nothing needs URL encoding and nothing breaks on a
+case-sensitive server.
 
 ```
-https://picsum.photos/seed/marisol-hero/1000/1250
+hero.jpg                 480x640     37.6 KB
+location-la-jolla.jpg    800x1000   128.7 KB
+location-north-park.jpg  800x1000   157.5 KB
+location-coronado.jpg    800x1000   129.1 KB
+about-origin.jpg         738x414     33.3 KB
+about-wood-fire.jpg      515x388     38.2 KB
+about-owner.jpg          389x280      6.6 KB   not referenced — see below
+dish-ceviche-verde.jpg   148x148      7.5 KB
+dish-baja-fish-taco.jpg  554x554     39.0 KB
+dish-branzino.jpg        452x678     90.4 KB
+dish-camarones.jpg       452x678     61.1 KB
 ```
 
-Seeds follow `marisol-<what-it-is>` and every slot uses a distinct one, so no two
-positions ever show the same photo. There are 11 in total:
+Total 729 KB, down from 8.0 MB of unoptimised source. The three location files
+arrived as landscape PNGs and were converted to JPEG and cropped to 4:5
+portrait; everything else was already smaller than its target, so it was left
+at native size rather than upscaled.
 
-`marisol-hero`, `marisol-ceviche`, `marisol-baja-fish-taco`, `marisol-branzino`,
-`marisol-camarones`, `marisol-la-jolla`, `marisol-north-park`, `marisol-coronado`,
-`marisol-fish-counter`, `marisol-chef-elena`, `marisol-wood-grill`.
+Every `<img>` carries explicit `width` and `height` matching the file on disk,
+so nothing reflows while loading, plus `decoding="async"` and `loading="lazy"`
+on everything except the hero.
 
-### Swapping in real photography
+### Two images need attention
 
-Find them all with:
+- **`about-owner.jpg` is not used anywhere.** It carries a visible Shutterstock
+  watermark (`shutterstock.com · 2183015259`), so it is an unlicensed comp.
+  Wiring it in would publish a watermarked stock image. Drop a licensed copy in
+  at the same path and add the figure back to the chef section in `about.html`.
+- **`location-north-park.jpg`** loses the leading M of the painted MARISOL
+  awning under the arch mask. The sign runs off the top-left of the source
+  frame, so no crop of this file keeps the whole word: it needs a frame with
+  more headroom above the awning.
 
-```
-grep -rn "picsum.photos" *.html
-```
+### Replacing a photo
 
-Replace the `src` value and leave `width`, `height` and `alt` in place, or update
-them to match the new file. Those attributes are what stop the layout shifting
-while images load, so do not drop them. Images are cropped with `object-fit:
-cover`, so a different aspect ratio will still fill its slot correctly.
-
----
+Drop the new file in at the same path, then update the `width` and `height`
+attributes to the new dimensions. Images are cropped with `object-fit: cover`,
+so a different aspect ratio still fills its slot — but the arch mask cuts into
+the top third, so keep faces and signage out of the top-left and top-right
+corners.
 
 ## The reservation form is non-functional by design
 
