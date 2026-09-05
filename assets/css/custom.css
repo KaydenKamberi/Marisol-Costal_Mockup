@@ -14,31 +14,47 @@
 
 :root {
   /* Palette --------------------------------------------------------------
-     Cool whitewash and talavera cobalt carry the page. One red does all the
-     work of emphasis. --chile is 4.93:1 against --cal in BOTH directions, so
-     the same value works as text on the ground and as a label on a fill. */
-  --cal:     #EEF1F3;   /* whitewashed lime plaster, blue cast — page ground */
-  --sal:     #FFFFFF;   /* pure white — "chrome and ice" panels on the wall  */
-  --hielo:   #D6DEE4;   /* hairline rules, separators, quiet borders         */
-  --cobalto: #1B44B8;   /* talavera cobalt — full color fields only          */
-  --tinta:   #0C1E4E;   /* ink navy — all body type, footer field            */
-  --chile:   #C9241A;   /* the single accent — actions and emphasis          */
+     Warm, sunlit, soft. Cream ground, deep Pacific teal for large flat
+     blocks, one coral for action.
+
+     Two additions to the specified six, both forced by contrast maths:
+     --coral-ink is the same hue as --coral (10deg) but dark enough to be
+     text or a thin border on cream; --line is a warm hairline, replacing the
+     cool grey the old palette used for rules. See the README. */
+  --shell:     #FDF6EE;   /* warm cream — the page ground, everywhere       */
+  --sea:       #0B6E7F;   /* deep Pacific teal — large flat blocks          */
+  --surf:      #7FD1CC;   /* pale turquoise — washes, hovers, type on teal  */
+  --coral:     #FF6A4D;   /* sunset coral — fills only                      */
+  --deep:      #08333D;   /* darkest teal — footer                          */
+  --ink:       #16292F;   /* body text                                      */
+
+  --coral-ink: #D03818;   /* coral as text or thin line on cream (4.60:1)   */
+  --line:      #E4D6C6;   /* warm hairline rules and borders                */
+  --muted:     #55686D;   /* secondary body text on cream (5.46:1)          */
 
   /* Typography ----------------------------------------------------------- */
-  --font-display: "Anton", "Haettenschweiler", "Arial Narrow", sans-serif;
-  --font-text: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system,
+  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --font-text: "DM Sans", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, sans-serif;
 
-  /* Modular scale, ratio ~1.25, fluid at the top end */
-  --step--2: 0.75rem;      /* 12px — hours, legal, footnotes          */
-  --step--1: 0.875rem;     /* 14px — nav, labels, form hints          */
-  --step-0:  1.0625rem;    /* 17px — body                             */
-  --step-1:  1.25rem;      /* 20px — lead paragraph, prices           */
-  --step-2:  1.5rem;       /* 24px — dish names, h3                   */
-  --step-3:  2rem;         /* 32px — h2 on small screens              */
-  --step-4:  clamp(2.5rem, 1.8rem + 3vw, 3.5rem);    /* section heads */
-  --step-5:  clamp(3.5rem, 2rem + 7vw, 6rem);        /* page titles   */
-  --step-6:  clamp(4rem, 1rem + 14vw, 10.5rem);      /* hero name     */
+  /* The redesign fixes five sizes and asks for no others. The old
+     --step-* names are kept as aliases so every existing rule maps onto one
+     of the five rather than inventing in-between values. */
+  --t-hero:  clamp(3.5rem, 9vw, 7rem);
+  --t-h2:    clamp(2.25rem, 5vw, 3.75rem);
+  --t-h3:    1.5rem;
+  --t-body:  1.125rem;
+  --t-small: 0.875rem;
+
+  --step--2: var(--t-small);
+  --step--1: var(--t-small);
+  --step-0:  var(--t-body);
+  --step-1:  var(--t-body);
+  --step-2:  var(--t-h3);
+  --step-3:  var(--t-h3);
+  --step-4:  var(--t-h2);
+  --step-5:  var(--t-h2);
+  --step-6:  var(--t-hero);
 
   /* Space, 8px base ------------------------------------------------------ */
   --space-1:  0.5rem;
@@ -51,7 +67,10 @@
   --space-8:  8rem;
 
   /* Structure ------------------------------------------------------------ */
-  --grout: 6px;            /* whitewash showing between tiles */
+  --grout: 6px;            /* gap between adjacent blocks */
+  --radius: 14px;          /* cards and blocks */
+  --pill: 999px;           /* buttons */
+  --arch: 50% 50% 14px 14px / 30% 30% 14px 14px;   /* photo mask */
   --measure: 62ch;         /* body line length, well under 80 characters */
   --wrap: 78rem;           /* 1248px content container */
   --gutter: 1.5rem;
@@ -80,12 +99,13 @@ html {
 }
 
 body {
+  position: relative;
   margin: 0;
-  background-color: var(--cal);
-  color: var(--tinta);
+  background-color: var(--shell);
+  color: var(--ink);
   font-family: var(--font-text);
-  font-size: var(--step-0);
-  line-height: 1.6;
+  font-size: var(--t-body);
+  line-height: 1.65;
   font-variant-numeric: tabular-nums;   /* prices align without hacks */
   -webkit-font-smoothing: antialiased;
 }
@@ -100,15 +120,13 @@ a {
   color: inherit;
 }
 
-/* Nothing on this site has a rounded corner. Structure comes from flat
-   blocks butted together, the way tile meets painted stucco. */
-button,
+/* Blocks are soft. Photographs get the arch, controls get 14px, buttons get
+   a pill; nothing on the site has a hard 90 degree corner. */
 input,
 select,
 textarea,
-img,
 fieldset {
-  border-radius: 0;
+  border-radius: var(--radius);
 }
 
 /* --------------------------------------------------------------------------
@@ -116,19 +134,21 @@ fieldset {
    -------------------------------------------------------------------------- */
 
 :focus-visible {
-  outline: 3px solid var(--chile);
+  outline: 3px solid var(--coral-ink);
   outline-offset: 2px;
 }
 
-/* Inside cobalt or ink fields the chile ring loses contrast, so it flips to
-   salt white. The open mobile nav is one of those fields: a chile ring on the
-   ink panel measures 2.86:1, under the 3:1 minimum for a focus indicator.
+/* Inside teal or deep fields the coral ring loses contrast, so it flips to
+   cream. The open mobile nav is one of those fields: a coral ring on the teal
+   panel has almost no contrast, well under the 3:1 minimum for an indicator.
    The `.field-dark:focus-visible` case covers a dark panel that is itself
    focusable, which the descendant selector alone would miss. */
 .field-dark :focus-visible,
 .field-dark:focus-visible,
-.site-nav.is-open :focus-visible {
-  outline-color: var(--sal);
+.site-nav.is-open :focus-visible,
+.hero :focus-visible,
+.site-footer :focus-visible {
+  outline-color: var(--shell);
 }
 
 .skip-link {
@@ -137,8 +157,9 @@ fieldset {
   top: var(--space-2);
   z-index: 100;
   padding: 0.75rem 1.25rem;
-  background-color: var(--chile);
-  color: var(--sal);
+  border-radius: var(--pill);
+  background-color: var(--coral);
+  color: var(--ink);
   font-size: var(--step--1);
   font-weight: 600;
   text-decoration: none;
@@ -155,21 +176,33 @@ fieldset {
 
 .t-display {
   font-family: var(--font-display);
-  font-weight: 400;
-  line-height: 0.9;
+  font-weight: 900;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  line-height: 1;
   letter-spacing: -0.01em;
-  text-transform: none;
 }
 
-.t-hero    { font-size: var(--step-6); }
-.t-title   { font-size: var(--step-5); }
-.t-section { font-size: var(--step-4); }
-.t-sub     { font-size: var(--step-3); }
-.t-item    { font-size: var(--step-2); }
+.t-hero {
+  font-size: var(--t-hero);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.t-title,
+.t-section { font-size: var(--t-h2); }
+
+/* h3 is the one display weight that is not 900 */
+.t-sub,
+.t-item {
+  font-size: var(--t-h3);
+  font-weight: 600;
+  line-height: 1.2;
+}
 
 .t-lead {
-  font-size: var(--step-1);
-  line-height: 1.5;
+  font-size: var(--t-body);
+  line-height: 1.65;
 }
 
 .t-small { font-size: var(--step--1); }
@@ -191,13 +224,13 @@ fieldset {
 
 .rule {
   border: 0;
-  border-top: 1px solid var(--hielo);
+  border-top: 1px solid var(--line);
   margin: 0;
 }
 
 .rule-cobalto {
   border: 0;
-  border-top: 2px solid var(--cobalto);
+  border-top: 2px solid var(--sea);
   margin: 0;
 }
 
@@ -216,50 +249,80 @@ fieldset {
 
 .btn {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--pill);
   font-family: var(--font-text);
-  font-size: var(--step--1);
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-size: var(--t-small);
+  font-weight: 500;
+  line-height: 1.4;
   text-decoration: none;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: background-color 120ms linear, color 120ms linear,
-    border-color 120ms linear;
+  transition: background-color 200ms ease, color 200ms ease,
+    border-color 200ms ease;
 }
 
+/* Primary: coral fill. The label is --ink, not --shell: cream on this coral
+   is 2.64:1, which fails even the 3:1 floor for non-text. Ink is 5.33:1. */
 .btn-accent {
-  background-color: var(--chile);
-  color: var(--sal);
-  border-color: var(--chile);
+  background-color: var(--coral);
+  color: var(--ink);
+  border-color: var(--coral);
 }
 
 .btn-accent:hover {
-  background-color: var(--tinta);
-  border-color: var(--tinta);
+  background-color: transparent;
+  color: var(--coral-ink);
+  border-color: var(--coral-ink);
 }
 
+/* Secondary: outline that fills on hover. The line and label use --coral-ink
+   for the same reason: a #FF6A4D hairline on cream is 2.64:1. */
 .btn-outline {
   background-color: transparent;
-  color: var(--tinta);
-  border-color: var(--tinta);
+  color: var(--coral-ink);
+  border-color: var(--coral-ink);
 }
 
 .btn-outline:hover {
-  background-color: var(--tinta);
-  color: var(--cal);
+  background-color: var(--coral);
+  color: var(--ink);
+  border-color: var(--coral);
 }
 
+/* A coral pill on teal is only 2.09:1 against its backdrop, so on dark fields
+   it gets a cream ring to make the component boundary unambiguous. */
+.hero .btn-accent,
+.field-dark .btn-accent,
+.site-nav.is-open .btn-accent {
+  border-color: var(--shell);
+}
+
+/* coral-ink is invisible on teal (1.20:1), so the outline button inverts. */
+.site-nav.is-open .btn-outline,
+.field-dark .btn-outline {
+  color: var(--shell);
+  border-color: var(--shell);
+}
+
+.site-nav.is-open .btn-outline:hover,
+.field-dark .btn-outline:hover {
+  background-color: var(--shell);
+  color: var(--sea);
+  border-color: var(--shell);
+}
+
+/* On a teal or ink field, where coral has no contrast at all (2.09:1). */
 .btn-light {
-  background-color: var(--sal);
-  color: var(--tinta);
-  border-color: var(--sal);
+  background-color: var(--shell);
+  color: var(--ink);
+  border-color: var(--shell);
 }
 
 .btn-light:hover {
-  background-color: var(--chile);
-  color: var(--sal);
-  border-color: var(--chile);
+  background-color: transparent;
+  color: var(--shell);
+  border-color: var(--shell);
 }
 
 /* --------------------------------------------------------------------------
@@ -267,10 +330,28 @@ fieldset {
    -------------------------------------------------------------------------- */
 
 .site-header {
-  background-color: var(--cal);
-  border-bottom: 3px solid var(--cobalto);
-  position: relative;
-  z-index: 20;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background-color: var(--shell);
+  transition: box-shadow 200ms ease, background-color 200ms ease;
+}
+
+/* main.js adds .is-stuck once a sentinel 100px down the page leaves the
+   viewport. This is the one shadow on the site. */
+.site-header.is-stuck {
+  background-color: rgba(253, 246, 238, 0.86);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 24px -12px rgba(8, 51, 61, 0.45);
+}
+
+.header-sentinel {
+  position: absolute;
+  top: 100px;
+  height: 1px;
+  width: 1px;
+  pointer-events: none;
 }
 
 .header-inner {
@@ -283,25 +364,29 @@ fieldset {
 
 .wordmark {
   font-family: var(--font-display);
+  font-weight: 900;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 40, "WONK" 1;
   font-size: 1.75rem;
   line-height: 1;
-  letter-spacing: 0.01em;
-  color: var(--tinta);
+  letter-spacing: -0.02em;
+  color: var(--sea);
   text-decoration: none;
 }
 
 .wordmark:hover {
-  color: var(--chile);
+  color: var(--coral-ink);
 }
 
 .nav-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 0.9rem;
+  padding: 0.6rem 1rem;
+  border-radius: var(--pill);
   background-color: transparent;
-  border: 2px solid var(--tinta);
-  color: var(--tinta);
+  border: 2px solid var(--sea);
+  color: var(--sea);
   font-family: var(--font-text);
   font-size: var(--step--1);
   font-weight: 600;
@@ -339,8 +424,9 @@ fieldset {
   left: 0;
   right: 0;
   top: 100%;
-  background-color: var(--tinta);
-  color: var(--cal);
+  background-color: var(--sea);
+  color: var(--shell);
+  border-radius: 0 0 var(--radius) var(--radius);
   padding: var(--space-3) var(--gutter) var(--space-4);
 }
 
@@ -363,11 +449,11 @@ fieldset {
 }
 
 .nav-link[aria-current="page"] {
-  color: var(--chile);
+  color: var(--coral-ink);
 }
 
 .site-nav.is-open .nav-link[aria-current="page"] {
-  color: var(--sal);
+  color: var(--surf);
   text-decoration: underline;
   text-underline-offset: 6px;
   text-decoration-thickness: 3px;
@@ -380,7 +466,13 @@ fieldset {
   gap: var(--space-2);
   margin-top: var(--space-3);
   padding-top: var(--space-3);
-  border-top: 1px solid rgba(238, 241, 243, 0.25);
+  border-top: 1px solid rgba(253, 246, 238, 0.25);
+}
+
+@media (max-width: 1099.98px) and (min-width: 900px) {
+  .header-phone {
+    display: none;
+  }
 }
 
 .header-phone {
@@ -418,22 +510,40 @@ fieldset {
   }
 
   .nav-link {
+    position: relative;
     font-family: var(--font-text);
-    font-size: var(--step--1);
-    font-weight: 600;
-    /* 15px of text plus this padding clears the 24px minimum target size */
+    font-size: var(--t-small);
+    font-weight: 500;
+    /* text plus this padding clears the 24px minimum target size */
     padding: 0.55rem 0;
-    border-bottom: 2px solid transparent;
+  }
+
+  /* Underline grows from the left, and stays put on the current page so the
+     active state is not signalled by colour alone. */
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.3rem;
+    height: 2px;
+    background-color: var(--coral-ink);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 200ms ease;
+  }
+
+  .nav-link:hover::after,
+  .site-nav .nav-link[aria-current="page"]::after {
+    transform: scaleX(1);
   }
 
   .nav-link:hover {
-    color: var(--chile);
+    color: var(--coral-ink);
   }
 
-  /* Colour alone must not be the only signal for the current page. */
   .site-nav .nav-link[aria-current="page"] {
-    color: var(--chile);
-    border-bottom-color: var(--chile);
+    color: var(--coral-ink);
     text-decoration: none;
   }
 
@@ -452,8 +562,8 @@ fieldset {
    -------------------------------------------------------------------------- */
 
 .site-footer {
-  background-color: var(--tinta);
-  color: var(--cal);
+  background-color: var(--deep);
+  color: var(--shell);
   padding-block: var(--space-6) var(--space-4);
 }
 
@@ -486,7 +596,7 @@ fieldset {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--hielo);
+  color: var(--line);
   margin: 0 0 var(--space-2);
 }
 
@@ -512,9 +622,9 @@ fieldset {
 .footer-fine {
   margin-top: var(--space-5);
   padding-top: var(--space-3);
-  border-top: 1px solid rgba(238, 241, 243, 0.2);
+  border-top: 1px solid rgba(253, 246, 238, 0.2);
   font-size: var(--step--2);
-  color: var(--hielo);
+  color: var(--line);
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-1) var(--space-4);
@@ -555,6 +665,76 @@ fieldset {
   flex-wrap: wrap;
 }
 
+
+/* --------------------------------------------------------------------------
+   9c. Shape and motion
+
+   Arches on every photograph, pills on every button, 14px on every block,
+   and no box-shadow anywhere except the header once it sticks.
+   -------------------------------------------------------------------------- */
+
+.arch {
+  overflow: hidden;
+  border-radius: var(--arch);
+}
+
+.arch img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Scalloped edge where a teal block meets the cream ground. The SVG fills the
+   colour it is leaving; .wave-flip turns it over for the other direction. */
+.wave {
+  display: block;
+  width: 100%;
+  padding-block: 0;
+  margin: 0;
+  line-height: 0;
+}
+
+.wave svg {
+  display: block;
+  width: 100%;
+  height: 26px;
+}
+
+.wave-flip svg {
+  transform: scaleY(-1);
+}
+
+/* Motion ------------------------------------------------------------------ */
+
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 600ms cubic-bezier(.16, 1, .3, 1),
+              transform 600ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.js-reveal .reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* Staggers are done in CSS so the observer stays a single, dumb toggle. */
+.reveal {
+  transition: opacity 600ms cubic-bezier(.16, 1, .3, 1),
+              transform 600ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.stagger-60  > .reveal:nth-child(2) { transition-delay:  60ms; }
+.stagger-60  > .reveal:nth-child(3) { transition-delay: 120ms; }
+.stagger-60  > .reveal:nth-child(4) { transition-delay: 180ms; }
+.stagger-60  > .reveal:nth-child(5) { transition-delay: 240ms; }
+.stagger-60  > .reveal:nth-child(n+6) { transition-delay: 300ms; }
+
+.stagger-80  > .reveal:nth-child(2) { transition-delay:  80ms; }
+.stagger-80  > .reveal:nth-child(3) { transition-delay: 160ms; }
+.stagger-80  > .reveal:nth-child(n+4) { transition-delay: 240ms; }
+
 /* --------------------------------------------------------------------------
    10. Utilities
    -------------------------------------------------------------------------- */
@@ -576,16 +756,16 @@ fieldset {
   border: 0;
 }
 
-/* A small label above a block: sentence case, not a tracked-out caps eyebrow. */
+/* A small label above a block: sentence case, never caps. */
 .tile-label {
-  font-size: var(--step--1);
-  font-weight: 600;
-  color: var(--chile);
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--coral-ink);
   margin: 0 0 0.35rem;
 }
 
 .field-dark .tile-label {
-  color: var(--hielo);
+  color: var(--line);
 }
 
 /* Vegetarian mark on the menu. */
@@ -594,8 +774,8 @@ fieldset {
   font-family: var(--font-text);
   /* 0.85em of the 14px legend line fell to 11.9px; keep a floor of 13px */
   font-size: max(0.85em, 0.8125rem);
-  font-weight: 600;
-  color: var(--chile);
+  font-weight: 500;
+  color: var(--coral-ink);
   white-space: nowrap;
 }
 
@@ -660,20 +840,19 @@ main > div {
 .dish-grid,
 .strip-grid,
 .menu-list,
-.menu-jump-list,
-.tile-links {
+.menu-jump-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .field-dark {
-  background-color: var(--cobalto);
-  color: var(--cal);
+  background-color: var(--sea);
+  color: var(--shell);
 }
 
 .site-footer.field-dark {
-  background-color: var(--tinta);
+  background-color: var(--deep);
 }
 
 /* Forms ------------------------------------------------------------------ */
@@ -684,220 +863,148 @@ main > div {
 
 .field label {
   display: block;
-  font-size: var(--step--1);
-  font-weight: 600;
-  margin-bottom: 0.35rem;
+  font-size: var(--t-small);
+  font-weight: 500;
+  margin-bottom: 0.4rem;
 }
 
 .field input,
 .field select,
 .field textarea {
   width: 100%;
-  padding: 0.7rem 0.85rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
   font-family: var(--font-text);
-  font-size: var(--step-0);
-  color: var(--tinta);
-  background-color: var(--sal);
-  border: 2px solid var(--hielo);
+  font-size: var(--t-body);
+  color: var(--ink);
+  background-color: var(--shell);
+  border: 2px solid var(--line);
 }
 
 .field input:hover,
 .field select:hover,
 .field textarea:hover {
-  border-color: var(--tinta);
+  border-color: var(--sea);
 }
 
 .field [aria-invalid="true"] {
-  border-color: var(--chile);
+  border-color: var(--coral-ink);
 }
 
 .field-hint,
 .field-optional {
-  font-size: var(--step--2);
-  color: var(--tinta);
-  opacity: 0.72;
-  margin: 0.35rem 0 0;
+  font-size: var(--t-small);
+  color: var(--muted);
+  margin: 0.4rem 0 0;
 }
 
 .field-error {
-  font-size: var(--step--1);
-  font-weight: 600;
-  color: var(--chile);
-  margin: 0.35rem 0 0;
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--coral-ink);
+  margin: 0.4rem 0 0;
 }
 
 .form-error-summary {
-  border: 2px solid var(--chile);
-  padding: var(--space-2);
+  background-color: var(--shell);
+  border: 2px solid var(--coral-ink);
+  border-radius: var(--radius);
+  padding: var(--space-3);
   margin-bottom: var(--space-3);
 }
 
 .form-error-title {
   margin: 0 0 0.5rem;
-  font-size: var(--step-0);
-  font-weight: 600;
+  font-size: var(--t-body);
+  font-weight: 500;
 }
 
 .form-error-summary ul {
   margin: 0;
   padding-left: 1.2rem;
-  font-size: var(--step--1);
+  font-size: var(--t-small);
 }
 
-.reserve-confirmation {
-  padding: var(--space-4);
+.form-error-summary a {
+  color: var(--coral-ink);
+  font-weight: 500;
 }
 
 
 /* --------------------------------------------------------------------------
    12. Home page
 
-   The hero is a tiled panel: flat blocks butted together with the whitewash
-   ground showing through as grout. The photograph is a neighbouring tile, not
-   a backdrop with text laid over it.
+   A full-width teal panel: wordmark and copy on the left, an arched
+   photograph on the right. The photo is a neighbour, not a backdrop.
    -------------------------------------------------------------------------- */
 
 .hero {
-  padding-block: var(--space-3) var(--space-5);
+  background-color: var(--sea);
+  color: var(--shell);
+  padding-block: var(--space-6);
 }
 
 .hero-grid {
   display: grid;
-  gap: var(--grout);
   grid-template-columns: 1fr;
+  gap: var(--space-4);
+  align-items: center;
 }
 
-.hero-tile {
-  display: flex;
-  flex-direction: column;
-  padding: var(--space-3);
-}
-
-/* The cobalt panel: the name painted on tile. */
-.hero-tile-name {
-  background-color: var(--cobalto);
-  color: var(--cal);
-  justify-content: flex-end;
-  padding: var(--space-5) var(--space-3) var(--space-4);
-}
-
-.hero-tile-name h1 {
+.hero-copy h1 {
   margin: 0;
+  color: var(--shell);
 }
 
-.hero-rule {
-  width: 4rem;
-  border: 0;
-  border-top: 5px solid var(--cal);
-  margin: var(--space-3) 0 0;
-}
-
+/* Fraunces 600 in --surf. 3.35:1 on teal, so this is only ever used large. */
 .hero-kicker {
-  font-size: var(--step-1);
+  font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: 0.02em;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  font-size: var(--t-h3);
+  line-height: 1.2;
+  color: var(--surf);
   margin: var(--space-2) 0 0;
 }
 
 .hero-line {
-  margin: var(--space-2) 0 0;
-  max-width: 32ch;
+  margin: var(--space-3) 0 0;
+  max-width: 34ch;
+  color: var(--shell);
 }
 
-/* The photograph, full brightness, no scrim. */
-.hero-tile-photo {
-  padding: 0;
+.hero-actions {
+  margin: var(--space-4) 0 0;
+}
+
+.hero-photo {
   margin: 0;
   overflow: hidden;
+  border-radius: var(--arch);
 }
 
-.hero-tile-photo img {
+.hero-photo img {
   width: 100%;
-  height: 100%;
   aspect-ratio: 4 / 5;
   max-height: 60vh;
   object-fit: cover;
+  animation: drift 20s ease-in-out infinite alternate;
 }
 
-/* The one chile block on the page. */
-.hero-tile-reserve {
-  background-color: var(--chile);
-  color: var(--sal);
-  text-decoration: none;
-  justify-content: space-between;
-  gap: var(--space-4);
-  transition: background-color 120ms linear;
+@keyframes drift {
+  from { transform: scale(1); }
+  to   { transform: scale(1.04); }
 }
 
-.hero-tile-reserve:hover {
-  background-color: var(--tinta);
-}
-
-.hero-tile-hours,
-.hero-tile-locations {
-  background-color: var(--sal);
-  color: var(--tinta);
-}
-
-.hero-tile-hours p,
-.hero-tile-locations p {
-  margin: 0;
-}
-
-/* In a two-column tile this value has about 155px to live in at 1024px wide.
-   At a flat 2rem it broke as "11am-" / "10pm" and the 0.9 display leading made
-   the two lines collide, so it scales with the viewport and never breaks. */
-.hero-tile-hours .t-sub {
-  margin-bottom: 0.4rem;
-  font-size: clamp(1.25rem, 1.6vw + 0.4rem, 2rem);
-  white-space: nowrap;
-  line-height: 1;
-}
-
-.tile-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  font-weight: 600;
-  font-size: var(--step-0);
-}
-
-.tile-links a {
-  text-decoration: none;
-  border-bottom: 2px solid var(--hielo);
-  padding-bottom: 0.15rem;
-}
-
-.tile-links a:hover {
-  border-bottom-color: var(--chile);
-  color: var(--chile);
-}
-
-@media (min-width: 600px) and (max-width: 899.98px) {
+@media (min-width: 860px) {
   .hero-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 6fr 4fr;
+    gap: var(--space-6);
   }
 
-  .hero-tile-name,
-  .hero-tile-photo {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (min-width: 900px) {
-  .hero-grid {
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: auto minmax(11rem, auto);
-  }
-
-  .hero-tile-name      { grid-column: 1 / 8;  grid-row: 1; }
-  .hero-tile-photo     { grid-column: 8 / 13; grid-row: 1 / 3; }
-  .hero-tile-reserve   { grid-column: 1 / 4;  grid-row: 2; }
-  .hero-tile-hours     { grid-column: 4 / 6;  grid-row: 2; }
-  .hero-tile-locations { grid-column: 6 / 8;  grid-row: 2; }
-
-  .hero-tile-photo img {
-    aspect-ratio: auto;
+  .hero-photo img {
+    aspect-ratio: 4 / 5;
     max-height: none;
   }
 }
@@ -911,7 +1018,8 @@ main > div {
 .intro-mark {
   width: 3.5rem;
   border: 0;
-  border-top: 5px solid var(--chile);
+  border-top: 5px solid var(--coral);
+  border-radius: var(--pill);
   margin: 0 0 var(--space-3);
 }
 
@@ -926,7 +1034,7 @@ main > div {
 }
 
 .intro a:hover {
-  color: var(--chile);
+  color: var(--coral-ink);
 }
 
 /* Signature dishes -------------------------------------------------------- */
@@ -946,7 +1054,7 @@ main > div {
 }
 
 .section-head-link:hover {
-  color: var(--chile);
+  color: var(--coral-ink);
 }
 
 .dish-grid {
@@ -956,142 +1064,127 @@ main > div {
   margin-top: var(--space-4);
 }
 
+.dish figure {
+  margin: 0 0 var(--space-2);
+  overflow: hidden;
+  border-radius: var(--arch);
+}
+
 .dish img {
   width: 100%;
   aspect-ratio: 3 / 2;
   object-fit: cover;
-  margin-bottom: var(--space-2);
 }
 
 /* Name and price share a baseline under a heavy rule: the price is the second
    headline, never a whispered grey number. */
 .dish-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-2);
-  border-top: 2px solid var(--tinta);
-  padding-top: 0.6rem;
+  gap: 0 var(--space-2);
+  padding-top: 0.2rem;
 }
 
 .dish-head h3 {
   margin: 0;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .dish-price {
   margin: 0;
-  font-size: var(--step-1);
-  font-weight: 600;
-  line-height: 1;
+  font-size: var(--t-h3);
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 .dish-note {
   margin: 0.5rem 0 0;
   font-size: var(--step--1);
   max-width: 34ch;
-  color: #35426B;
+  color: var(--muted);
 }
 
 @media (min-width: 640px) {
   .dish-grid { grid-template-columns: repeat(2, 1fr); }
-  .dish img { aspect-ratio: 1 / 1; }
+  .dish img { aspect-ratio: 4 / 5; }
 }
 
 @media (min-width: 1024px) {
   .dish-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* Locations strip --------------------------------------------------------- */
+/* Come visit us ----------------------------------------------------------- */
 
 .locations-strip {
-  background-color: var(--cobalto);
-  color: var(--cal);
-  padding-block: var(--space-6);
+  background-color: var(--shell);
+  color: var(--ink);
+  padding-block: var(--space-6) var(--space-7);
+  text-align: center;
 }
 
 .locations-strip h2 {
-  margin: 0;
-}
-
-.locations-strip a {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1px;
-}
-
-.locations-strip a:hover {
-  text-decoration-thickness: 3px;
+  margin: 0 auto var(--space-5);
+  color: var(--sea);
 }
 
 .strip-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-4);
-  margin-top: var(--space-4);
+  gap: var(--space-5);
+  text-align: left;
 }
 
-.strip-grid > li + li {
-  border-top: 1px solid rgba(238, 241, 243, 0.35);
-  padding-top: var(--space-4);
+.visit-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.visit-photo {
+  margin: 0 0 var(--space-3);
+  overflow: hidden;
+  border-radius: var(--arch);
+}
+
+.visit-photo img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  transition: transform 400ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.visit-card:hover .visit-photo img {
+  transform: scale(1.03);
 }
 
 .strip-grid h3 {
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--space-1);
+  color: var(--sea);
 }
 
-.strip-grid p {
-  margin: 0 0 0.4rem;
+.visit-card:hover h3 {
+  color: var(--coral-ink);
 }
 
 .strip-address {
   font-style: normal;
+  margin: 0 0 0.35rem;
+  color: var(--muted);
 }
 
-.strip-hours {
-  margin-top: var(--space-5);
-  padding-top: var(--space-3);
-  border-top: 1px solid rgba(238, 241, 243, 0.35);
+.strip-phone {
+  font-weight: 500;
+  color: var(--ink);
 }
 
-.hours-list-row li span:first-child {
-  min-width: 5.5rem;
-}
-
-@media (min-width: 768px) {
+@media (min-width: 760px) {
   .strip-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-  }
-
-  .strip-grid > li,
-  .strip-grid > li + li {
-    padding-inline: var(--space-4);
-    padding-top: 0;
-    border-top: 0;
-    border-left: 1px solid rgba(238, 241, 243, 0.35);
-  }
-
-  .strip-grid > li:first-child {
-    padding-left: 0;
-    border-left: 0;
-  }
-
-  .hours-list-row {
-    flex-direction: row;
-    gap: var(--space-6);
-  }
-
-  .hours-list-row li {
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-
-  .hours-list-row li span:first-child {
-    min-width: 0;
+    gap: var(--space-4);
   }
 }
-
 
 /* --------------------------------------------------------------------------
    13. Interior page masthead
@@ -1121,7 +1214,7 @@ main > div {
 }
 
 .page-head-note {
-  color: #35426B;
+  color: var(--muted);
 }
 
 @media (min-width: 850px) {
@@ -1144,16 +1237,35 @@ main > div {
   position: sticky;
   top: 0;
   z-index: 15;
-  background-color: var(--cal);
-  border-block: 1px solid var(--hielo);
+  background-color: var(--shell);
+  border-block: 1px solid var(--line);
   padding-block: 0;
 }
 
 .menu-jump-list {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem var(--space-3);
   padding-block: 0.7rem;
+}
+
+/* Slides between tabs rather than jumping. */
+.tab-underline {
+  position: absolute;
+  left: 0;
+  bottom: 0.45rem;
+  width: 0;
+  height: 2px;
+  border-radius: var(--pill);
+  background-color: var(--coral-ink);
+  pointer-events: none;
+  transition: transform 250ms cubic-bezier(.16, 1, .3, 1),
+              width 250ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.menu-jump-list a.is-active {
+  color: var(--coral-ink);
 }
 
 .menu-jump-list a {
@@ -1167,8 +1279,7 @@ main > div {
 }
 
 .menu-jump-list a:hover {
-  border-bottom-color: var(--chile);
-  color: var(--chile);
+  color: var(--coral-ink);
 }
 
 .menu-body {
@@ -1180,7 +1291,7 @@ main > div {
   gap: var(--space-2);
   max-width: 60rem;
   padding-block: var(--space-4);
-  border-top: 2px solid var(--tinta);
+  border-top: 1px solid var(--line);
   /* clear the sticky jump bar when an anchor is followed */
   scroll-margin-top: 3.5rem;
 }
@@ -1191,9 +1302,9 @@ main > div {
 
 .menu-section-note {
   margin: var(--space-1) 0 0;
-  font-size: var(--step--1);
-  font-weight: 600;
-  color: var(--chile);
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--coral-ink);
 }
 
 .menu-item {
@@ -1204,15 +1315,15 @@ main > div {
 }
 
 .menu-item + .menu-item {
-  border-top: 1px solid var(--hielo);
+  border-top: 1px solid var(--line);
 }
 
 .menu-item-name {
   grid-area: 1 / 1;
   margin: 0;
   font-family: var(--font-text);
-  font-size: var(--step-1);
-  font-weight: 600;
+  font-size: var(--t-body);
+  font-weight: 500;
   line-height: 1.3;
 }
 
@@ -1221,8 +1332,8 @@ main > div {
 .menu-item-price {
   grid-area: 1 / 2;
   margin: 0;
-  font-size: var(--step-1);
-  font-weight: 600;
+  font-size: var(--t-body);
+  font-weight: 500;
   line-height: 1.3;
   text-align: right;
 }
@@ -1231,7 +1342,7 @@ main > div {
   grid-area: 2 / 1;
   margin: 0.15rem 0 0;
   font-size: var(--step-0);
-  color: #35426B;
+  color: var(--muted);
   max-width: 46ch;
 }
 
@@ -1241,7 +1352,7 @@ main > div {
 
 .menu-foot .wrap > p {
   max-width: 60rem;
-  border-top: 2px solid var(--tinta);
+  border-top: 1px solid var(--line);
   padding-top: var(--space-4);
 }
 
@@ -1252,12 +1363,12 @@ main > div {
 }
 
 .menu-foot a:hover {
-  color: var(--chile);
+  color: var(--coral-ink);
 }
 
 @media (min-width: 800px) {
   .menu-section {
-    grid-template-columns: 16rem 1fr;
+    grid-template-columns: 19rem 1fr;
     gap: var(--space-5);
     padding-block: var(--space-5);
   }
@@ -1274,16 +1385,16 @@ main > div {
    -------------------------------------------------------------------------- */
 
 .hours-panel {
-  background-color: var(--cobalto);
-  color: var(--cal);
-  padding-block: var(--space-4);
+  background-color: var(--sea);
+  color: var(--shell);
+  padding-block: var(--space-5);
 }
 
 /* A sentence-case label, not a tracked-out caps eyebrow. */
 .panel-label {
   font-size: var(--step--1);
   font-weight: 600;
-  color: var(--hielo);
+  color: var(--line);
   margin: 0 0 var(--space-2);
 }
 
@@ -1311,9 +1422,9 @@ main > div {
   padding-block: var(--space-6) var(--space-4);
 }
 
-/* Photo tile beside detail tile, whitewash showing between them, same grout
-   as the hero. Consistent across all three rooms: the structure is the
-   information, so alternating the sides would only be decoration. */
+/* Arched photo beside a rounded detail block. Consistent across all three
+   rooms: the structure is the information, so alternating the sides would
+   only be decoration. */
 .location {
   display: grid;
   grid-template-columns: 1fr;
@@ -1330,6 +1441,7 @@ main > div {
 .location-photo {
   margin: 0;
   overflow: hidden;
+  border-radius: var(--arch);
 }
 
 .location-photo img {
@@ -1343,7 +1455,9 @@ main > div {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  background-color: var(--sal);
+  background-color: var(--shell);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   padding: var(--space-4);
 }
 
@@ -1365,12 +1479,12 @@ main > div {
 }
 
 .location-phone:hover {
-  color: var(--chile);
+  color: var(--coral-ink);
 }
 
-.location-actions {
+.location-detail .location-actions {
   margin-top: auto;
-  padding-top: var(--space-2);
+  padding-top: var(--space-3);
 }
 
 @media (min-width: 800px) {
@@ -1379,14 +1493,14 @@ main > div {
   }
 
   .location-photo img {
-    aspect-ratio: auto;
+    aspect-ratio: 4 / 5;
   }
 }
 
 /* Reservation form ------------------------------------------------------- */
 
 .reserve {
-  border-top: 2px solid var(--tinta);
+  border-top: 1px solid var(--line);
   padding-block: var(--space-6) var(--space-7);
 }
 
@@ -1410,11 +1524,11 @@ main > div {
 }
 
 .form-error-summary {
-  background-color: var(--sal);
+  background-color: var(--shell);
 }
 
 .form-error-summary a {
-  color: var(--chile);
+  color: var(--coral-ink);
   font-weight: 600;
 }
 
@@ -1432,7 +1546,7 @@ main > div {
 }
 
 .reserve-confirmation .tile-label {
-  color: var(--hielo);
+  color: var(--line);
 }
 
 .reserve-confirmation .t-sub {
@@ -1445,7 +1559,7 @@ main > div {
 
 .reserve-confirmation p:last-child {
   margin-bottom: 0;
-  color: var(--hielo);
+  color: var(--line);
 }
 
 @media (min-width: 480px) {
@@ -1489,7 +1603,7 @@ main > div {
   gap: var(--space-3);
   max-width: 60rem;
   padding-block: var(--space-5);
-  border-top: 2px solid var(--tinta);
+  border-top: 1px solid var(--line);
 }
 
 .about-head h2 {
@@ -1508,14 +1622,21 @@ main > div {
   margin: var(--space-4) 0 0;
 }
 
+.about-figure {
+  overflow: hidden;
+  border-radius: var(--arch);
+}
+
 .about-figure img {
   width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
 }
 
 .about-figure figcaption {
-  margin-top: 0.6rem;
+  padding-top: 0.6rem;
   font-size: var(--step--1);
-  color: #35426B;
+  color: var(--muted);
 }
 
 .about-figure-portrait {
@@ -1546,6 +1667,8 @@ main > div {
 @media print {
   .site-nav,
   .nav-toggle,
+  .wave,
+  .hero-actions,
   .site-footer,
   .menu-jump,
   .skip-link,
@@ -1558,14 +1681,14 @@ main > div {
   }
 
   body {
-    background: #fff;
-    color: #000;
+    background: #fff;   /* paper */
+    color: #111;
     font-size: 11pt;
   }
 
   .site-header {
     background: #fff;
-    border-bottom: 1pt solid #000;
+    border-bottom: 1pt solid #111;
     padding-bottom: 0.4rem;
   }
 
@@ -1595,7 +1718,7 @@ main > div {
   }
 
   .menu-section {
-    border-top: 1pt solid #000;
+    border-top: 1pt solid #111;
     padding-block: 0.6rem;
   }
 
@@ -1605,27 +1728,42 @@ main > div {
 
   /* Colour fields would eat a print cartridge for no benefit. */
   .field-dark,
-  .hero-tile-name,
+  .hero,
   .locations-strip,
   .hours-panel,
   .location-detail {
     background: #fff !important;
-    color: #000 !important;
+    color: #111 !important;
   }
 
   .hours-panel {
-    border: 1pt solid #000;
+    border: 1pt solid #111;
   }
 
   .menu-item-price,
   .menu-item-name,
   .tile-label,
   .panel-label {
-    color: #000 !important;
+    color: #111 !important;
   }
 
   img {
     max-width: 100%;
+    animation: none !important;
+  }
+
+  .arch,
+  .hero-photo,
+  .visit-photo,
+  .location-photo,
+  .about-figure,
+  .dish figure {
+    border-radius: var(--radius);
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
@@ -1645,5 +1783,11 @@ main > div {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .js-reveal .reveal,
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

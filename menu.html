@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:SOFT,WONK,opsz,wght@40,1,9..144,600;40,1,9..144,900&family=DM+Sans:wght@400;500&display=swap">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -42,6 +42,7 @@
 <body>
 
   <a class="skip-link" href="#main">Skip to content</a>
+  <span class="header-sentinel" data-header-sentinel aria-hidden="true"></span>
 
   <!-- ============================ HEADER ============================ -->
   <header class="site-header">
@@ -62,6 +63,7 @@
         </ul>
         <div class="header-contact">
           <a class="header-phone" href="tel:+16195550142">(619) 555-0142</a>
+          <a class="btn btn-outline" href="locations.html">Order</a>
           <a class="btn btn-accent" href="locations.html#reserve">Reserve</a>
         </div>
       </nav>
@@ -87,7 +89,8 @@
 
     <nav class="menu-jump" aria-label="Menu sections">
       <div class="wrap">
-        <ul class="menu-jump-list">
+        <ul class="menu-jump-list" data-tablist>
+          <li class="tab-underline" data-tab-underline aria-hidden="true"></li>
             <li><a href="#starters">Starters</a></li>
             <li><a href="#tacos">Tacos</a></li>
             <li><a href="#plates">Plates</a></li>
@@ -99,8 +102,8 @@
       </div>
     </nav>
 
-    <div class="wrap menu-body">
-      <section class="menu-section" id="starters" aria-labelledby="starters-heading">
+    <div class="wrap menu-body stagger-60">
+      <section class="menu-section reveal" id="starters" aria-labelledby="starters-heading">
         <div class="menu-section-head">
           <h2 class="t-display t-section" id="starters-heading">Starters</h2>
         </div>
@@ -133,7 +136,7 @@
         </ul>
       </section>
 
-      <section class="menu-section" id="tacos" aria-labelledby="tacos-heading">
+      <section class="menu-section reveal" id="tacos" aria-labelledby="tacos-heading">
         <div class="menu-section-head">
           <h2 class="t-display t-section" id="tacos-heading">Tacos</h2>
           <p class="menu-section-note">Priced each</p>
@@ -162,7 +165,7 @@
         </ul>
       </section>
 
-      <section class="menu-section" id="plates" aria-labelledby="plates-heading">
+      <section class="menu-section reveal" id="plates" aria-labelledby="plates-heading">
         <div class="menu-section-head">
           <h2 class="t-display t-section" id="plates-heading">Plates</h2>
         </div>
@@ -195,7 +198,7 @@
         </ul>
       </section>
 
-      <section class="menu-section" id="sides" aria-labelledby="sides-heading">
+      <section class="menu-section reveal" id="sides" aria-labelledby="sides-heading">
         <div class="menu-section-head">
           <h2 class="t-display t-section" id="sides-heading">Sides</h2>
         </div>
@@ -215,7 +218,7 @@
         </ul>
       </section>
 
-      <section class="menu-section" id="dessert" aria-labelledby="dessert-heading">
+      <section class="menu-section reveal" id="dessert" aria-labelledby="dessert-heading">
         <div class="menu-section-head">
           <h2 class="t-display t-section" id="dessert-heading">Dessert</h2>
         </div>
@@ -235,7 +238,7 @@
         </ul>
       </section>
 
-      <section class="menu-section" id="cocktails" aria-labelledby="cocktails-heading">
+      <section class="menu-section reveal" id="cocktails" aria-labelledby="cocktails-heading">
         <div class="menu-section-head">
           <h2 class="t-display t-section" id="cocktails-heading">Cocktails</h2>
         </div>
@@ -261,7 +264,7 @@
         </ul>
       </section>
 
-      <section class="menu-section" id="no-alcohol" aria-labelledby="no-alcohol-heading">
+      <section class="menu-section reveal" id="no-alcohol" aria-labelledby="no-alcohol-heading">
         <div class="menu-section-head">
           <h2 class="t-display t-section" id="no-alcohol-heading">No Alcohol</h2>
         </div>
@@ -290,6 +293,11 @@
 
   </main>
 
+  <div class="wave wave-flip" aria-hidden="true">
+    <svg viewBox="0 0 680 26" preserveAspectRatio="none" focusable="false">
+      <path d="M0,0 C56,26 112,26 170,13 C228,0 284,0 340,13 C396,26 452,26 510,13 C568,0 624,0 680,13 L680,0 Z" fill="#08333D"/>
+    </svg>
+  </div>
   <!-- ============================ FOOTER ============================ -->
   <footer class="site-footer field-dark">
     <div class="wrap">

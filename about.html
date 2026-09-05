@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:SOFT,WONK,opsz,wght@40,1,9..144,600;40,1,9..144,900&family=DM+Sans:wght@400;500&display=swap">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -42,6 +42,7 @@
 <body>
 
   <a class="skip-link" href="#main">Skip to content</a>
+  <span class="header-sentinel" data-header-sentinel aria-hidden="true"></span>
 
   <!-- ============================ HEADER ============================ -->
   <header class="site-header">
@@ -62,6 +63,7 @@
         </ul>
         <div class="header-contact">
           <a class="header-phone" href="tel:+16195550142">(619) 555-0142</a>
+          <a class="btn btn-outline" href="locations.html">Order</a>
           <a class="btn btn-accent" href="locations.html#reserve">Reserve</a>
         </div>
       </nav>
@@ -84,7 +86,7 @@
     <div class="wrap about-body">
 
       <section class="about-section" aria-labelledby="story-heading">
-        <div class="about-head">
+        <div class="about-head reveal">
           <h2 class="t-display t-section" id="story-heading">How it started</h2>
         </div>
         <div class="about-content">
@@ -119,7 +121,7 @@
       </section>
 
       <section class="about-section" aria-labelledby="chef-heading">
-        <div class="about-head">
+        <div class="about-head reveal">
           <h2 class="t-display t-section" id="chef-heading">Elena Sotomayor</h2>
           <p class="tile-label">Chef and owner</p>
         </div>
@@ -146,7 +148,7 @@
       </section>
 
       <section class="about-section" aria-labelledby="fire-heading">
-        <div class="about-head">
+        <div class="about-head reveal">
           <h2 class="t-display t-section" id="fire-heading">What we cook on</h2>
         </div>
         <div class="about-content">
@@ -170,6 +172,11 @@
 
   </main>
 
+  <div class="wave wave-flip" aria-hidden="true">
+    <svg viewBox="0 0 680 26" preserveAspectRatio="none" focusable="false">
+      <path d="M0,0 C56,26 112,26 170,13 C228,0 284,0 340,13 C396,26 452,26 510,13 C568,0 624,0 680,13 L680,0 Z" fill="#08333D"/>
+    </svg>
+  </div>
   <!-- ============================ FOOTER ============================ -->
   <footer class="site-footer field-dark">
     <div class="wrap">

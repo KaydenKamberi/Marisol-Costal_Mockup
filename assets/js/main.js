@@ -7,6 +7,56 @@
 (function () {
   "use strict";
 
+  var reduceMotion = window.matchMedia
+    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    : false;
+
+  /* ------------------------------------------------------------------
+     Reveal on scroll
+
+     The .reveal class only hides anything once this script has run, so a
+     blocked or failed script leaves the content visible rather than blank.
+     ------------------------------------------------------------------ */
+
+  var revealables = document.querySelectorAll(".reveal");
+
+  if (revealables.length && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("js-reveal");
+
+    var show = function (el) { el.classList.add("in-view"); };
+
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          show(entry.target);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -5% 0px" });
+
+    Array.prototype.forEach.call(revealables, function (el) {
+      // The hero fires on load rather than waiting for a scroll it may never get.
+      if (el.hasAttribute("data-reveal-now") || reduceMotion) {
+        show(el);
+      } else {
+        revealObserver.observe(el);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     Header shadow once the page has moved past 100px
+     ------------------------------------------------------------------ */
+
+  var sentinel = document.querySelector("[data-header-sentinel]");
+  var header = document.querySelector(".site-header");
+
+  if (sentinel && header && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      header.classList.toggle("is-stuck", !entries[0].isIntersecting);
+    }, { threshold: 0 }).observe(sentinel);
+  }
+
   /* ------------------------------------------------------------------
      Mobile navigation
      ------------------------------------------------------------------ */
@@ -31,6 +81,80 @@
         navToggle.focus();
       }
     });
+  }
+
+  /* ------------------------------------------------------------------
+     Menu section tabs
+
+     The underline slides between tabs instead of jumping. Which tab is
+     active comes from whichever menu section is nearest the top of the
+     viewport, so it tracks scrolling as well as clicks.
+     ------------------------------------------------------------------ */
+
+  var tablist = document.querySelector("[data-tablist]");
+  var underline = document.querySelector("[data-tab-underline]");
+
+  if (tablist && underline) {
+    var tabs = Array.prototype.slice.call(tablist.querySelectorAll("a"));
+
+    var moveTo = function (tab) {
+      if (!tab) { return; }
+      tabs.forEach(function (t) { t.classList.toggle("is-active", t === tab); });
+      underline.style.width = tab.offsetWidth + "px";
+      underline.style.transform = "translateX(" + tab.offsetLeft + "px)";
+    };
+
+    var current = function () {
+      return tabs.filter(function (t) { return t.classList.contains("is-active"); })[0];
+    };
+
+    if ("IntersectionObserver" in window) {
+      var sections = Array.prototype.slice.call(
+        document.querySelectorAll(".menu-section")
+      );
+
+      /* Pick the last section whose top has passed a line a third of the way
+         down the viewport. Choosing the first *visible* section instead put
+         the underline on whichever group happened to be highest on screen,
+         which lands on the wrong tab mid-scroll. */
+      var syncFromScroll = function () {
+        var line = window.innerHeight / 3;
+        var currentId = sections.length ? sections[0].id : null;
+
+        sections.forEach(function (section) {
+          if (section.getBoundingClientRect().top <= line) {
+            currentId = section.id;
+          }
+        });
+
+        for (var i = 0; i < tabs.length; i++) {
+          if (tabs[i].getAttribute("href").slice(1) === currentId) {
+            moveTo(tabs[i]);
+            return;
+          }
+        }
+      };
+
+      var ticking = false;
+      var onScroll = function () {
+        if (ticking) { return; }
+        ticking = true;
+        window.requestAnimationFrame(function () {
+          syncFromScroll();
+          ticking = false;
+        });
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      syncFromScroll();
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () { moveTo(tab); });
+    });
+
+    moveTo(tabs[0]);
+    window.addEventListener("resize", function () { moveTo(current() || tabs[0]); });
   }
 
   /* ------------------------------------------------------------------

@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:SOFT,WONK,opsz,wght@40,1,9..144,600;40,1,9..144,900&family=DM+Sans:wght@400;500&display=swap">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -42,6 +42,7 @@
 <body>
 
   <a class="skip-link" href="#main">Skip to content</a>
+  <span class="header-sentinel" data-header-sentinel aria-hidden="true"></span>
 
   <!-- ============================ HEADER ============================ -->
   <header class="site-header">
@@ -62,6 +63,7 @@
         </ul>
         <div class="header-contact">
           <a class="header-phone" href="tel:+16195550142">(619) 555-0142</a>
+          <a class="btn btn-outline" href="locations.html">Order</a>
           <a class="btn btn-accent" href="locations.html#reserve">Reserve</a>
         </div>
       </nav>
@@ -82,6 +84,11 @@
       </div>
     </section>
 
+    <div class="wave wave-flip" aria-hidden="true">
+      <svg viewBox="0 0 680 26" preserveAspectRatio="none" focusable="false">
+        <path d="M0,0 C56,26 112,26 170,13 C228,0 284,0 340,13 C396,26 452,26 510,13 C568,0 624,0 680,13 L680,0 Z" fill="#0B6E7F"/>
+      </svg>
+    </div>
     <section class="hours-panel field-dark" aria-labelledby="hours-heading">
       <div class="wrap">
         <h2 class="panel-label" id="hours-heading">Same hours at all three</h2>
@@ -92,9 +99,14 @@
         </ul>
       </div>
     </section>
+    <div class="wave" aria-hidden="true">
+      <svg viewBox="0 0 680 26" preserveAspectRatio="none" focusable="false">
+        <path d="M0,0 C56,26 112,26 170,13 C228,0 284,0 340,13 C396,26 452,26 510,13 C568,0 624,0 680,13 L680,0 Z" fill="#0B6E7F"/>
+      </svg>
+    </div>
 
-    <div class="wrap locations-body">
-      <section class="location" id="la-jolla" aria-labelledby="la-jolla-heading">
+    <div class="wrap locations-body stagger-80">
+      <section class="location reveal" id="la-jolla" aria-labelledby="la-jolla-heading">
         <figure class="location-photo">
           <img src="https://picsum.photos/seed/marisol-la-jolla/900/600"
                alt="A narrow room half a block up from the cove, with a marble counter and six stools facing the grill."
@@ -114,7 +126,7 @@
         </div>
       </section>
 
-      <section class="location" id="north-park" aria-labelledby="north-park-heading">
+      <section class="location reveal" id="north-park" aria-labelledby="north-park-heading">
         <figure class="location-photo">
           <img src="https://picsum.photos/seed/marisol-north-park/900/600"
                alt="The North Park dining room with a long bar, tiled floor and open windows onto University Avenue."
@@ -134,7 +146,7 @@
         </div>
       </section>
 
-      <section class="location" id="coronado" aria-labelledby="coronado-heading">
+      <section class="location reveal" id="coronado" aria-labelledby="coronado-heading">
         <figure class="location-photo">
           <img src="https://picsum.photos/seed/marisol-coronado/900/600"
                alt="The Coronado dining room, a converted bait shop with whitewashed walls and cobalt tile."
@@ -159,7 +171,7 @@
     <section class="reserve" id="reserve" aria-labelledby="reserve-heading">
       <div class="wrap reserve-inner">
         <div class="reserve-intro">
-          <h2 class="t-display t-section" id="reserve-heading">Ask for a table</h2>
+          <h2 class="t-display t-section reveal" id="reserve-heading">Ask for a table</h2>
           <p class="measure">
             Tell us when and how many. We answer these in the morning, usually before
             eleven. For a party larger than twelve, call the room directly &mdash; it is
@@ -246,6 +258,11 @@
 
   </main>
 
+  <div class="wave wave-flip" aria-hidden="true">
+    <svg viewBox="0 0 680 26" preserveAspectRatio="none" focusable="false">
+      <path d="M0,0 C56,26 112,26 170,13 C228,0 284,0 340,13 C396,26 452,26 510,13 C568,0 624,0 680,13 L680,0 Z" fill="#08333D"/>
+    </svg>
+  </div>
   <!-- ============================ FOOTER ============================ -->
   <footer class="site-footer field-dark">
     <div class="wrap">

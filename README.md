@@ -52,40 +52,83 @@ read those same custom properties, so colour has a single source of truth.
 
 ### Palette
 
+Warm, sunlit and soft. Cream ground, deep Pacific teal for large flat blocks,
+one coral for action.
+
 | Token | Hex | Role |
 |---|---|---|
-| `--cal` | `#EEF1F3` | Whitewashed lime plaster — the page ground |
-| `--sal` | `#FFFFFF` | Pure white — "chrome and ice" panels sitting on the wall |
-| `--hielo` | `#D6DEE4` | Hairline rules and separators |
-| `--cobalto` | `#1B44B8` | Talavera cobalt — full colour fields only, never a border |
-| `--tinta` | `#0C1E4E` | Ink navy — all body type, and the footer field |
-| `--chile` | `#C9241A` | The single accent — actions and emphasis |
+| `--shell` | `#FDF6EE` | Warm cream — the page ground, everywhere |
+| `--sea` | `#0B6E7F` | Deep Pacific teal — large flat colour blocks |
+| `--surf` | `#7FD1CC` | Pale turquoise — washes, hovers, secondary type on teal |
+| `--coral` | `#FF6A4D` | Sunset coral — fills only |
+| `--deep` | `#08333D` | Darkest teal — footer |
+| `--ink` | `#16292F` | Body text |
 
-`--chile` measures 4.93:1 against `--cal` in both directions, so one value works
-as text on the ground *and* as a label on a filled button. There is no second
-"accessible variant" to keep in sync.
+Three further tokens exist because the six above cannot cover every job at an
+accessible contrast:
+
+| Token | Hex | Why it exists |
+|---|---|---|
+| `--coral-ink` | `#D03818` | Same hue as `--coral` (10°) but dark enough to be text or a thin line on cream. `#FF6A4D` on `#FDF6EE` is **2.64:1** and fails even the 3:1 floor for non-text. |
+| `--line` | `#E4D6C6` | A warm hairline for rules and borders. |
+| `--muted` | `#55686D` | Secondary body text on cream, 5.46:1. |
+
+`--surf` on `--sea` is 3.35:1, so it is only ever used at display sizes — the
+hero's "Coastal Kitchen & Bar" line and nothing smaller.
+
+There is no pure white and no pure black anywhere on screen.
 
 ### Type
 
-**Anton** for display (the painted market sign) and **IBM Plex Sans** for
-everything else, both from Google Fonts. Plex was chosen partly for its true
-tabular figures — the menu depends on them to align prices without a hack.
+**Fraunces** for display at 600 and 900, with optical sizing on and
+`font-variation-settings: "SOFT" 40, "WONK" 1`. **DM Sans** at 400 and 500 for
+everything else. Both from Google Fonts.
 
-The scale is modular at roughly 1.25, `--step--2` through `--step-6`, fluid at
-the top end via `clamp()`. Body line length is capped at 62 characters.
+Five sizes and no others:
 
-### Three rules the design follows
+```
+hero    Fraunces 900   clamp(3.5rem, 9vw, 7rem)      line-height 0.95, tracking -0.03em
+h2      Fraunces 900   clamp(2.25rem, 5vw, 3.75rem)  line-height 1
+h3      Fraunces 600   1.5rem
+body    DM Sans 400    1.125rem                      line-height 1.65
+small   DM Sans 500    0.875rem
+```
 
-1. **Grout, not shadow.** Structure comes from flat blocks butted together with
-   the ground showing between them. Nothing floats, nothing has a drop shadow,
-   and `border-radius` is 0 everywhere on the site.
-2. **Hard sun, no haze.** Full saturation, full opacity, no gradients and no
-   dark scrims over photographs. Text that needs to be legible sits on a solid
-   field *beside* an image, never on top of it.
-3. **Prices are the second headline.** They are set in tabular figures at the
-   same size and weight as the dish name, never in a lighter grey.
+The older `--step-*` names are kept as aliases onto those five, so no rule can
+quietly invent an in-between size. Sentence case on headings; no all-caps.
 
----
+### Shape
+
+Softness carries the design more than the palette does.
+
+- **Arched photographs.** Every image on the site is masked with
+  `border-radius: 50% 50% 14px 14px / 30% 30% 14px 14px`.
+- **Pill buttons.** `border-radius: 999px`, 200ms both ways. Primary is a coral
+  fill; secondary is a coral-ink outline that fills coral on hover.
+- **Wave dividers.** An inline scalloped SVG, 26px tall, `preserveAspectRatio:
+  none`, filled to match the section it is leaving. `.wave-flip` turns it over
+  for a cream-to-teal boundary.
+- **Blocks** get `14px`. **No box-shadow anywhere** except the header once it
+  sticks.
+- The header sits on cream with no rule, and gains a soft shadow and backdrop
+  blur only after the page has scrolled past 100px.
+
+### Motion
+
+Deliberately sparse. One `IntersectionObserver` adds `.in-view` and never
+removes it.
+
+- Section headings, the hero block (on load rather than scroll), menu section
+  groups staggered 60ms and capped at six, and location cards staggered 80ms.
+- Nothing else: not nav, footer, buttons, body copy or individual menu rows.
+- Nav links grow a coral underline from the left. The menu page's section tabs
+  have an underline that slides between them, driven by scroll position.
+- The hero photograph scales 1.0 to 1.04 over 20 seconds, barely perceptibly.
+
+`.reveal` only hides anything once the script has run, so a blocked or failed
+script leaves every page fully visible rather than blank. Under
+`prefers-reduced-motion: reduce` every transition and animation is flattened and
+all revealed content is shown immediately.
 
 ## Images
 
@@ -137,7 +180,8 @@ the existing validation as a first pass.
 Checked in Chromium rather than assumed:
 
 - Colour contrast passes AA across header, main content and footer on all four
-  pages, measured against actually painted backdrops.
+  pages, measured against actually painted backdrops. Two places deviate from
+  the redesign spec to achieve this; both are noted in the palette table above.
 - Every focusable element has a visible focus ring of at least 3:1 against
   whatever it sits on. The ring flips from chile to white inside cobalt and ink
   fields.
@@ -145,7 +189,7 @@ Checked in Chromium rather than assumed:
 - One `h1` per page, no skipped heading levels, one `main`/`header`/`footer`
   landmark per page, labelled navigation.
 - Every image has descriptive alt text and explicit dimensions.
-- The current page is signalled by an underline as well as colour, plus
+- The current page is signalled by a coral underline as well as colour, plus
   `aria-current="page"`.
 - A skip link is the first tab stop.
 - `prefers-reduced-motion` flattens every transition and disables smooth scroll.
@@ -156,7 +200,8 @@ Checked in Chromium rather than assumed:
 ## Browser support
 
 Modern evergreen browsers. The layout uses CSS grid, custom properties,
-`clamp()`, `aspect-ratio` and `object-fit`. The Tailwind config is guarded on
+`clamp()`, `aspect-ratio`, `object-fit`, `IntersectionObserver` and
+`backdrop-filter`. The Tailwind config is guarded on
 `window.tailwind`, so if the CDN is blocked or unreachable the page falls back to
 `custom.css` cleanly rather than throwing.
 

@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:SOFT,WONK,opsz,wght@40,1,9..144,600;40,1,9..144,900&family=DM+Sans:wght@400;500&display=swap">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -42,6 +42,7 @@
 <body>
 
   <a class="skip-link" href="#main">Skip to content</a>
+  <span class="header-sentinel" data-header-sentinel aria-hidden="true"></span>
 
   <!-- ============================ HEADER ============================ -->
   <header class="site-header">
@@ -55,13 +56,14 @@
 
       <nav class="site-nav" id="site-nav" aria-label="Main">
         <ul class="nav-list">
-          <li><a class="nav-link" href="index.html" aria-current="page">Home</a></li>
+          <li><a class="nav-link" href="index.html">Home</a></li>
           <li><a class="nav-link" href="menu.html">Menu</a></li>
           <li><a class="nav-link" href="locations.html">Locations</a></li>
           <li><a class="nav-link" href="about.html">About</a></li>
         </ul>
         <div class="header-contact">
           <a class="header-phone" href="tel:+16195550142">(619) 555-0142</a>
+          <a class="btn btn-outline" href="locations.html">Order</a>
           <a class="btn btn-accent" href="locations.html#reserve">Reserve</a>
         </div>
       </nav>
@@ -74,43 +76,31 @@
     <section class="hero" aria-labelledby="hero-name">
       <div class="wrap">
         <div class="hero-grid">
-
-          <div class="hero-tile hero-tile-name field-dark">
+          <div class="hero-copy reveal" data-reveal-now>
             <h1 class="t-display t-hero" id="hero-name">Marisol</h1>
-            <hr class="hero-rule">
             <p class="hero-kicker">Coastal Kitchen &amp; Bar</p>
-            <p class="hero-line">Baja seafood cooked over a wood fire. Three counters in San Diego.</p>
+            <p class="hero-line">
+              Baja seafood cooked over a wood fire. Three counters in San Diego.
+            </p>
+            <p class="hero-actions">
+              <a class="btn btn-accent" href="locations.html#reserve">Reserve a table</a>
+            </p>
           </div>
 
-          <figure class="hero-tile hero-tile-photo">
+          <figure class="hero-photo">
             <img src="https://picsum.photos/seed/marisol-hero/1000/1250"
                  alt="A whole grilled fish resting on crushed ice at a restaurant counter, lit by hard afternoon sun."
                  width="1000" height="1250">
           </figure>
-
-          <a class="hero-tile hero-tile-reserve" href="locations.html#reserve">
-            <span class="t-display t-sub">Reserve<br>a table</span>
-            <span class="t-small">Any of the three rooms</span>
-          </a>
-
-          <div class="hero-tile hero-tile-hours">
-            <p class="tile-label">Hours</p>
-            <p class="t-display t-sub">11am&ndash;10pm</p>
-            <p class="t-micro">Until 11pm Fri&nbsp;&amp;&nbsp;Sat.<br>Sun 10am&ndash;9pm.</p>
-          </div>
-
-          <div class="hero-tile hero-tile-locations">
-            <p class="tile-label">Three counters</p>
-            <ul class="tile-links">
-              <li><a href="locations.html#la-jolla">La Jolla</a></li>
-              <li><a href="locations.html#north-park">North Park</a></li>
-              <li><a href="locations.html#coronado">Coronado</a></li>
-            </ul>
-          </div>
-
         </div>
       </div>
     </section>
+
+  <div class="wave" aria-hidden="true">
+    <svg viewBox="0 0 680 26" preserveAspectRatio="none" focusable="false">
+      <path d="M0,0 C56,26 112,26 170,13 C228,0 284,0 340,13 C396,26 452,26 510,13 C568,0 624,0 680,13 L680,0 Z" fill="#0B6E7F"/>
+    </svg>
+  </div>
 
     <!-- ============================ INTRO ============================ -->
     <section class="intro" aria-label="About Marisol">
@@ -130,50 +120,54 @@
     <!-- ======================= SIGNATURE DISHES ======================= -->
     <section class="signatures" aria-labelledby="signatures-heading">
       <div class="wrap">
-        <div class="section-head">
+        <div class="section-head reveal">
           <h2 class="t-display t-section" id="signatures-heading">What we&rsquo;re known for</h2>
           <a class="section-head-link" href="menu.html">See the full menu</a>
         </div>
-        <hr class="rule">
 
         <ul class="dish-grid">
           <li class="dish">
-            <img src="https://picsum.photos/seed/marisol-ceviche/800/800"
-                 alt="Ceviche in a shallow bowl with cucumber, serrano and lime, tostadas leaning against the rim."
-                 width="800" height="800">
+            <figure>
+              <img src="https://picsum.photos/seed/marisol-ceviche/800/800"
+                   alt="Ceviche in a shallow bowl with cucumber, serrano and lime, tostadas leaning against the rim."
+                   width="800" height="800">
+            </figure>
             <div class="dish-head">
               <h3 class="t-display t-item">Ceviche Verde</h3>
               <p class="dish-price"><span class="u-visually-hidden">Price </span>16</p>
             </div>
             <p class="dish-note">Rock shrimp, cucumber, serrano, lime, tostadas</p>
           </li>
-
           <li class="dish">
-            <img src="https://picsum.photos/seed/marisol-baja-fish-taco/800/800"
-                 alt="A beer-battered fish taco topped with shredded cabbage and chipotle crema on a corn tortilla."
-                 width="800" height="800">
+            <figure>
+              <img src="https://picsum.photos/seed/marisol-baja-fish-taco/800/800"
+                   alt="A beer-battered fish taco topped with shredded cabbage and chipotle crema on a corn tortilla."
+                   width="800" height="800">
+            </figure>
             <div class="dish-head">
               <h3 class="t-display t-item">Baja Fish Taco</h3>
               <p class="dish-price"><span class="u-visually-hidden">Price </span>7</p>
             </div>
             <p class="dish-note">Beer-battered rockfish, cabbage, chipotle crema</p>
           </li>
-
           <li class="dish">
-            <img src="https://picsum.photos/seed/marisol-branzino/800/800"
-                 alt="A whole branzino split open on the grill, charred and dressed with citrus and herbs."
-                 width="800" height="800">
+            <figure>
+              <img src="https://picsum.photos/seed/marisol-branzino/800/800"
+                   alt="A whole branzino split open on the grill, charred and dressed with citrus and herbs."
+                   width="800" height="800">
+            </figure>
             <div class="dish-head">
               <h3 class="t-display t-item">Whole Grilled Branzino</h3>
               <p class="dish-price"><span class="u-visually-hidden">Price </span>34</p>
             </div>
             <p class="dish-note">Citrus, herbs, salsa macha</p>
           </li>
-
           <li class="dish">
-            <img src="https://picsum.photos/seed/marisol-camarones/800/800"
-                 alt="Head-on shrimp in a cast iron pan of guajillo butter with grilled bread alongside."
-                 width="800" height="800">
+            <figure>
+              <img src="https://picsum.photos/seed/marisol-camarones/800/800"
+                   alt="Head-on shrimp in a cast iron pan of guajillo butter with grilled bread alongside."
+                   width="800" height="800">
+            </figure>
             <div class="dish-head">
               <h3 class="t-display t-item">Camarones al Ajillo</h3>
               <p class="dish-price"><span class="u-visually-hidden">Price </span>27</p>
@@ -184,42 +178,59 @@
       </div>
     </section>
 
-    <!-- ======================= LOCATIONS STRIP ======================= -->
-    <section class="locations-strip field-dark" aria-labelledby="locations-heading">
+    <!-- ========================= COME VISIT US ========================= -->
+    <section class="locations-strip" aria-labelledby="locations-heading">
       <div class="wrap">
-        <h2 class="t-display t-section" id="locations-heading">Three counters</h2>
+        <h2 class="t-display t-section reveal" id="locations-heading">Come visit us</h2>
 
-        <ul class="strip-grid">
-          <li>
-            <h3 class="t-display t-item">La Jolla</h3>
-            <p class="strip-address">1220 Prospect St, Suite 4<br>San Diego, CA 92037</p>
-            <p><a href="tel:+16195550142">(619) 555-0142</a></p>
+        <ul class="strip-grid stagger-80">
+          <li class="reveal">
+            <a class="visit-card" href="locations.html#la-jolla">
+              <figure class="visit-photo">
+                <img src="https://picsum.photos/seed/marisol-la-jolla/900/1125"
+                     alt="A narrow room half a block up from the cove, with a marble counter and six stools facing the grill."
+                     width="900" height="1125">
+              </figure>
+              <h3 class="t-display t-item">La Jolla</h3>
+              <address class="strip-address">1220 Prospect St, Suite 4<br>San Diego, CA 92037</address>
+              <span class="strip-phone">(619) 555-0142</span>
+            </a>
           </li>
-          <li>
-            <h3 class="t-display t-item">North Park</h3>
-            <p class="strip-address">3005 University Ave<br>San Diego, CA 92104</p>
-            <p><a href="tel:+16195550187">(619) 555-0187</a></p>
+          <li class="reveal">
+            <a class="visit-card" href="locations.html#north-park">
+              <figure class="visit-photo">
+                <img src="https://picsum.photos/seed/marisol-north-park/900/1125"
+                     alt="The North Park dining room with a long bar, tiled floor and open windows onto University Avenue."
+                     width="900" height="1125">
+              </figure>
+              <h3 class="t-display t-item">North Park</h3>
+              <address class="strip-address">3005 University Ave<br>San Diego, CA 92104</address>
+              <span class="strip-phone">(619) 555-0187</span>
+            </a>
           </li>
-          <li>
-            <h3 class="t-display t-item">Coronado</h3>
-            <p class="strip-address">1102 Orange Ave<br>Coronado, CA 92118</p>
-            <p><a href="tel:+16195550163">(619) 555-0163</a></p>
+          <li class="reveal">
+            <a class="visit-card" href="locations.html#coronado">
+              <figure class="visit-photo">
+                <img src="https://picsum.photos/seed/marisol-coronado/900/1125"
+                     alt="The Coronado dining room, a converted bait shop with whitewashed walls and cobalt tile."
+                     width="900" height="1125">
+              </figure>
+              <h3 class="t-display t-item">Coronado</h3>
+              <address class="strip-address">1102 Orange Ave<br>Coronado, CA 92118</address>
+              <span class="strip-phone">(619) 555-0163</span>
+            </a>
           </li>
         </ul>
-
-        <div class="strip-hours">
-          <p class="tile-label">Same hours at all three</p>
-          <ul class="hours-list hours-list-row">
-            <li><span>Mon&ndash;Thu</span> <span>11am&ndash;10pm</span></li>
-            <li><span>Fri&ndash;Sat</span> <span>11am&ndash;11pm</span></li>
-            <li><span>Sun</span> <span>10am&ndash;9pm, brunch until 2pm</span></li>
-          </ul>
-        </div>
       </div>
     </section>
 
   </main>
 
+  <div class="wave wave-flip" aria-hidden="true">
+    <svg viewBox="0 0 680 26" preserveAspectRatio="none" focusable="false">
+      <path d="M0,0 C56,26 112,26 170,13 C228,0 284,0 340,13 C396,26 452,26 510,13 C568,0 624,0 680,13 L680,0 Z" fill="#08333D"/>
+    </svg>
+  </div>
   <!-- ============================ FOOTER ============================ -->
   <footer class="site-footer field-dark">
     <div class="wrap">
