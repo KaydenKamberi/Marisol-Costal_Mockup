@@ -384,6 +384,9 @@ fieldset {
 }
 
 .header-phone {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   font-size: var(--step--1);
   font-weight: 500;
   text-decoration: none;
@@ -418,15 +421,19 @@ fieldset {
     font-family: var(--font-text);
     font-size: var(--step--1);
     font-weight: 600;
-    padding: 0;
+    /* 15px of text plus this padding clears the 24px minimum target size */
+    padding: 0.55rem 0;
+    border-bottom: 2px solid transparent;
   }
 
   .nav-link:hover {
     color: var(--chile);
   }
 
+  /* Colour alone must not be the only signal for the current page. */
   .site-nav .nav-link[aria-current="page"] {
     color: var(--chile);
+    border-bottom-color: var(--chile);
     text-decoration: none;
   }
 
@@ -514,6 +521,41 @@ fieldset {
 }
 
 /* --------------------------------------------------------------------------
+   9b. Shrink behaviour
+
+   Grid and flex children default to min-width:auto, so they refuse to shrink
+   below their content's intrinsic width and push the page wider instead. That
+   shows up as horizontal overflow with a long email address, or with text-only
+   zoom turned up. Let them shrink, and let long display words break rather
+   than run off the edge.
+   -------------------------------------------------------------------------- */
+
+.footer-grid > *,
+.strip-grid > *,
+.hero-grid > *,
+.dish-grid > *,
+.menu-section > *,
+.about-section > *,
+.location > *,
+.reserve-inner > *,
+.page-head-inner > *,
+.field-row > *,
+.menu-item > * {
+  min-width: 0;
+}
+
+.t-display,
+.menu-item-name,
+.footer-list,
+.location-address {
+  overflow-wrap: break-word;
+}
+
+.header-inner {
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
    10. Utilities
    -------------------------------------------------------------------------- */
 
@@ -550,7 +592,8 @@ fieldset {
 .menu-veg {
   margin-left: 0.35em;
   font-family: var(--font-text);
-  font-size: 0.85em;
+  /* 0.85em of the 14px legend line fell to 11.9px; keep a floor of 13px */
+  font-size: max(0.85em, 0.8125rem);
   font-weight: 600;
   color: var(--chile);
   white-space: nowrap;
@@ -893,6 +936,8 @@ main > div {
 }
 
 .section-head-link {
+  display: inline-block;
+  padding-block: 0.2rem;
   font-size: var(--step--1);
   font-weight: 600;
   text-decoration-thickness: 2px;
@@ -1490,8 +1535,102 @@ main > div {
 
 }
 
+
 /* --------------------------------------------------------------------------
-   17. Motion
+   18. Print
+
+   The menu is the page people actually print. Drop the furniture, keep the
+   wordmark and the food, and stop sections from splitting across pages.
+   -------------------------------------------------------------------------- */
+
+@media print {
+  .site-nav,
+  .nav-toggle,
+  .site-footer,
+  .menu-jump,
+  .skip-link,
+  .hero-tile-reserve,
+  .location-actions,
+  .reserve-form,
+  .reserve-confirmation,
+  .menu-foot {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+  }
+
+  .site-header {
+    background: #fff;
+    border-bottom: 1pt solid #000;
+    padding-bottom: 0.4rem;
+  }
+
+  .menu-item-note,
+  .dish-note,
+  .about-figure figcaption,
+  .page-head-note {
+    color: #333 !important;
+  }
+
+  .wrap {
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .menu-section,
+  .about-section,
+  .location,
+  .dish,
+  figure {
+    break-inside: avoid;
+  }
+
+  .menu-section {
+    border-top: 1pt solid #000;
+    padding-block: 0.6rem;
+  }
+
+  .menu-item + .menu-item {
+    border-top: 1pt solid #bbb;
+  }
+
+  /* Colour fields would eat a print cartridge for no benefit. */
+  .field-dark,
+  .hero-tile-name,
+  .locations-strip,
+  .hours-panel,
+  .location-detail {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .hours-panel {
+    border: 1pt solid #000;
+  }
+
+  .menu-item-price,
+  .menu-item-name,
+  .tile-label,
+  .panel-label {
+    color: #000 !important;
+  }
+
+  img {
+    max-width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   19. Motion
    -------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
